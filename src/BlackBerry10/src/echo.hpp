@@ -24,6 +24,10 @@
 
 #include <string>
 #include <pthread.h>
+#include <btapi/btdevice.h>
+#include <btapi/btgatt.h>
+#include <btapi/btle.h>
+#include <btapi/btspp.h>
 #include "../public/plugin.h"
 
 class Echo: public JSExt {
@@ -31,14 +35,15 @@ class Echo: public JSExt {
 public:
     explicit Echo(const std::string& id);
     virtual ~Echo();
-
+    void myCallback(const int event, const char *bt_addr, const char *event_data);
+    
 // Interfaces of JSExt
     virtual bool CanDelete();
     virtual std::string InvokeMethod(const std::string& command);
 
 private:
     std::string doEcho(const std::string& message);
-
+    
     std::string m_id;
 };
 

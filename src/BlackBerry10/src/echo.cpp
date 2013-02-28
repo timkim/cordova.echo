@@ -43,6 +43,12 @@ Echo::Echo(const std::string& id) : m_id(id) {
 Echo::~Echo() {
 }
 
+Echo* whatever = NULL;
+
+void gmyCallback(const int event, const char *bt_addr, const char *event_data){
+    whatever -> myCallback(event, bt_addr, event_data);
+}
+
 /**
  * This method returns the list of objects implemented by this native
  * extension.
@@ -78,6 +84,9 @@ bool Echo::CanDelete() {
  * called on the JavaScript side with this native objects id.
  */
 string Echo::InvokeMethod(const string& command) {
+
+
+
     int index = command.find_first_of(" ");
     std::string method = command.substr(0, index);
     
@@ -93,18 +102,63 @@ string Echo::InvokeMethod(const string& command) {
             return "Cannot parse JSON object";
         }
     }    
-    
+
     // Determine which function should be executed
     if (method == "doEcho") {
-        std::string message = obj["message"].asString();
-        if(message.length() > 0) {
-            return doEcho(message);
-        }else{
-             return doEcho("Nothing to echo.");
-        }
+        // start blue tooth
+        //void *cbPnt = (myCallback);
+        whatever = this;
+        bt_device_init(gmyCallback);
+
     }else{
         return doEcho("Unsupported Method");
     }
+    
+}
+
+
+
+void Echo::myCallback(const int event, const char *bt_addr, const char *event_data)
+{
+    std::string devices_found = ""; 
+    // how does this work???
+    //handle_bt_events(event, bt_addr, event_data);
+    // Scan for Bluetooth devices nearby.
+    bt_disc_start_inquiry(BT_INQUIRY_GIAC);
+    delay(5);
+    // Cancel the scan since we should have what we need by now.
+    bt_disc_cancel_inquiry();
+    
+    // Retrieve information on discovered devices.
+    bt_remote_device_t *next_remote_device = 0;
+    
+    bt_remote_device_t **remote_device_array = bt_disc_retrieve_devices(BT_DISCOVERY_CACHED, 0);
+    
+    if (remote_device_array) {
+        for (int i = 0; (next_remote_device = remote_device_array[i]); ++i) {
+            char device_name[128];
+            char device_addr[128];
+            int device_class = -1;
+            const int bufferSize = sizeof(device_name);
+        
+            if (bt_rdev_get_friendly_name(next_remote_device, device_name, bufferSize) != 0) {
+                // handle error
+                
+            }    
+            if (bt_rdev_get_address(next_remote_device, device_addr) != 0) {
+                // handle error
+                
+            }    
+            device_class = bt_rdev_get_device_class(next_remote_device, BT_COD_DEVICECLASS);
+            
+            
+            // Work with retrieved data as needed.
+            devices_found += device_name;
+            
+        }
+        bt_rdev_free_array(remote_device_array);
+    }
+    //return devices_found;
 }
 
 /**
