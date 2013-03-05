@@ -43,10 +43,10 @@ Echo::Echo(const std::string& id) : m_id(id) {
 Echo::~Echo() {
 }
 
-Echo* whatever = NULL;
+//Echo* whatever = NULL;
 
 void gmyCallback(const int event, const char *bt_addr, const char *event_data){
-    whatever -> myCallback(event, bt_addr, event_data);
+    //whatever -> myCallback(event, bt_addr, event_data);
 }
 
 /**
@@ -107,8 +107,8 @@ string Echo::InvokeMethod(const string& command) {
     if (method == "doEcho") {
         // start blue tooth
         //void *cbPnt = (myCallback);
-        whatever = this;
-        bt_device_init(gmyCallback);
+       // whatever = this;
+        //bt_device_init(gmyCallback);
 
     }else{
         return doEcho("Unsupported Method");
