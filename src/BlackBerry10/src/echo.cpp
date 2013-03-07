@@ -27,6 +27,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "echo.hpp"
 
 using namespace std;
@@ -45,9 +46,10 @@ Echo::~Echo() {
 
 //Echo* whatever = NULL;
 
-void gmyCallback(const int event, const char *bt_addr, const char *event_data){
+//void gmyCallback(const int event, const char *bt_addr, const char *event_data){
     //whatever -> myCallback(event, bt_addr, event_data);
-}
+     //doEcho("ya");
+//}
 
 /**
  * This method returns the list of objects implemented by this native
@@ -84,9 +86,6 @@ bool Echo::CanDelete() {
  * called on the JavaScript side with this native objects id.
  */
 string Echo::InvokeMethod(const string& command) {
-
-
-
     int index = command.find_first_of(" ");
     std::string method = command.substr(0, index);
     
@@ -107,9 +106,11 @@ string Echo::InvokeMethod(const string& command) {
     if (method == "doEcho") {
         // start blue tooth
         //void *cbPnt = (myCallback);
-       // whatever = this;
+         //whatever = this;
+         doEcho("first");
         //bt_device_init(gmyCallback);
-
+        //doEcho("second");
+        //int g = BT_INQUIRY_GIAC;
     }else{
         return doEcho("Unsupported Method");
     }
@@ -120,10 +121,12 @@ string Echo::InvokeMethod(const string& command) {
 
 void Echo::myCallback(const int event, const char *bt_addr, const char *event_data)
 {
-    std::string devices_found = ""; 
+    
+    std::string devices_found = "test"; 
     // how does this work???
     //handle_bt_events(event, bt_addr, event_data);
     // Scan for Bluetooth devices nearby.
+ /*
     bt_disc_start_inquiry(BT_INQUIRY_GIAC);
     delay(5);
     // Cancel the scan since we should have what we need by now.
@@ -133,7 +136,7 @@ void Echo::myCallback(const int event, const char *bt_addr, const char *event_da
     bt_remote_device_t *next_remote_device = 0;
     
     bt_remote_device_t **remote_device_array = bt_disc_retrieve_devices(BT_DISCOVERY_CACHED, 0);
-    
+   
     if (remote_device_array) {
         for (int i = 0; (next_remote_device = remote_device_array[i]); ++i) {
             char device_name[128];
@@ -159,6 +162,9 @@ void Echo::myCallback(const int event, const char *bt_addr, const char *event_da
         bt_rdev_free_array(remote_device_array);
     }
     //return devices_found;
+    */
+    doEcho(devices_found);
+    
 }
 
 /**

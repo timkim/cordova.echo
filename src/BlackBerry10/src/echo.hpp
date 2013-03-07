@@ -35,7 +35,7 @@ class Echo: public JSExt {
 public:
     explicit Echo(const std::string& id);
     virtual ~Echo();
-    void actualCallback(const int event, const char *bt_addr, const char *event_data);
+    void myCallback(const int event, const char *bt_addr, const char *event_data);
     
 // Interfaces of JSExt
     virtual bool CanDelete();
