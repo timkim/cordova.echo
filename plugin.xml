@@ -10,7 +10,7 @@
     <name>cordova echo</name>
 
     
-    <platform name="BlackBerry10">    
+    <platform name="blackberry">    
         <config-file target="config.xml" parent="/widget">
             <feature id="cordova.echo" required="true" version="1.0.0.0"/>
         </config-file>
